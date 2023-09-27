@@ -10,9 +10,16 @@ const initialState = [
 const postSlice = createSlice({
     name: 'posts',
     initialState,
-    reducers: {}
+    reducers: {
+        postAdded(state, action) { state.push(action.payload) } // state.push normally would mutate the state. but it does only not hier inside the createSlice
+    }
 })
 
+// Selectors
 export const getAllPosts = (state) => state.posts
 
+// Actions
+export const { postAdded } = postSlice.actions // when we add postAdded function in reducers, than crateSlice automatically generates an action creater function with the same name.
+
+// Reducer
 export default postSlice.reducer
