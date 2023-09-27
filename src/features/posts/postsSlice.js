@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = [
     { id: '1', title: 'Football', content: 'Footbal is a sport and very popular' },
@@ -11,7 +11,12 @@ const postSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
-        postAdded(state, action) { state.push(action.payload) } // state.push normally would mutate the state. but it does only not hier inside the createSlice
+        postAdded: {
+            reducer(state, action) { state.push(action.payload) }, // state.push normally would mutate the state. but it does only not hier inside the createSlice
+            prepare(title, content) { 
+                return { payload: { id: nanoid(), title, content } 
+            } }
+        }    
     }
 })
 
