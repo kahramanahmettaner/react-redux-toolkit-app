@@ -7,14 +7,14 @@ const initialState = [
     { id: '4', title: 'News are good?', content: 'What do you mean, if the news are good?' }
 ]
 
-const postSlice = createSlice({
+const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
         postAdded: {
             reducer(state, action) { state.push(action.payload) }, // state.push normally would mutate the state. but it does only not hier inside the createSlice
-            prepare(title, content) { 
-                return { payload: { id: nanoid(), title, content } 
+            prepare(title, content, userId) { 
+                return { payload: { id: nanoid(), title, content, userId } 
             } }
         }    
     }
@@ -24,7 +24,7 @@ const postSlice = createSlice({
 export const getAllPosts = (state) => state.posts
 
 // Actions
-export const { postAdded } = postSlice.actions // when we add postAdded function in reducers, than crateSlice automatically generates an action creater function with the same name.
+export const { postAdded } = postsSlice.actions // when we add postAdded function in reducers, than crateSlice automatically generates an action creater function with the same name.
 
 // Reducer
-export default postSlice.reducer
+export default postsSlice.reducer
