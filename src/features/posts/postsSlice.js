@@ -65,7 +65,6 @@ const postsSlice = createSlice({
                         rocket: 0,
                         coffee: 0
                     }
-                    post.id = nanoid()
                     return post;
                 })
 
@@ -94,6 +93,7 @@ const postsSlice = createSlice({
 export const getAllPosts = (state) => state.posts.posts
 export const getPostsStatus = (state) => state.posts.status
 export const getPostsError = (state) => state.posts.error
+export const getPostById = (state, postId) => state.posts.posts.find( post => post.id === postId )
 
 // Actions
 export const { postAdded, reactionAdded } = postsSlice.actions // when we add postAdded function in reducers, than crateSlice automatically generates an action creater function with the same name.
