@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createSelector } from "@reduxjs/toolkit";
 import { sub } from 'date-fns'
 import axios from "axios";
 
@@ -41,6 +41,7 @@ const postsSlice = createSlice({
     name: 'posts',
     initialState,
     reducers: {
+        /* we dont need this, because we use addNewPost async thunk now 
         postAdded: {
             reducer(state, action) { state.posts.push(action.payload) }, // state.posts.push normally would mutate the state. but it does only not hier inside the createSlice
             prepare(title, content, userId) { 
@@ -54,6 +55,7 @@ const postsSlice = createSlice({
                         } 
                 }
         },
+        */
         reactionAdded(state, action) {
             const { postId, reaction } = action.payload
             const existingPost = state.posts.find(post => post.id === postId)
@@ -130,6 +132,12 @@ export const getAllPosts = (state) => state.posts.posts
 export const getPostsStatus = (state) => state.posts.status
 export const getPostsError = (state) => state.posts.error
 export const getPostById = (state, postId) => state.posts.posts.find( post => post.id === postId )
+// Memoized selector for performance optimization (ensuring the output function is called only when the dependencies change, not at every dispatch)
+export const getPostsByUser = createSelector(
+    [getAllPosts, (state, userId) => userId],                       // Dependencies ( if the getAllPosts value or userId changes, then:)
+    (posts, userId) => posts.filter(post => post.userId === userId)
+)
+
 
 // Actions
 export const { postAdded, reactionAdded } = postsSlice.actions // when we add postAdded function in reducers, than crateSlice automatically generates an action creater function with the same name.
