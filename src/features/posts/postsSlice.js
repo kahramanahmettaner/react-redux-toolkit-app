@@ -138,7 +138,6 @@ export const getPostsByUser = createSelector(
     (posts, userId) => posts.filter(post => post.userId === userId)
 )
 
-
 // Actions
 export const { postAdded, reactionAdded } = postsSlice.actions // when we add postAdded function in reducers, than crateSlice automatically generates an action creater function with the same name.
 
