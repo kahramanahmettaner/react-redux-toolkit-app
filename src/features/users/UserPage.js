@@ -1,25 +1,39 @@
-import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector"
+import { useSelector } from "react-redux/es/hooks/useSelector"
 import { getUserById } from "./usersSlice"
-import { getAllPosts, getPostsByUser } from "../posts/postsSlice"
+import { getPostsByUser } from "../posts/postsSlice"
 import { Link, useParams } from "react-router-dom"
+import { useGetPostsByUserIdQuery } from "../posts/postsSlice"
 
 const UserPage = () => {
     const { userId } = useParams()
     const user = useSelector( state => getUserById(state, Number(userId)))
 
-    // use memoize selector for performance optimization
-    const postsForUser = useSelector( state => getPostsByUser(state, Number(userId)))
+    const {
+        data: postsForUser,
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetPostsByUserIdQuery(userId)
 
-    const postTitles = postsForUser.map(post => (
-        <li key={post.id}>
-            <Link to={`/post/${post.id}`}>{post.title}</Link>
-        </li>
-    ))
+    let content
+    if (isLoading) {
+        content = <p>Loading...</p>
+    } else if (isSuccess) {
+        const { ids, entities } = postsForUser
+        content = ids.map(id => (
+            <li key={id}>
+                <Link to={`/post/${id}`}>{entities[id].title}</Link>
+            </li>
+        ))
+    } else if (isError) {
+        content = <p>{error}</p>
+    }
     
     return (
         <section>
             <h2>{user?.name}</h2>
-            <ol>{postTitles}</ol>
+            <ol>{content}</ol>
         </section>
     )
 }
