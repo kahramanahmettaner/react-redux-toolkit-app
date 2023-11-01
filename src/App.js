@@ -6,6 +6,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import EditPostForm from "./features/posts/EditPostForm"
 import UsersList from "./features/users/UsersList"
 import UserPage from "./features/users/UserPage"
+import NotFound from "./components/NotFound"
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
         </Route>
 
         {/* Catch all - replace with 404 component */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
 
       </Route>  
     </Routes> 
